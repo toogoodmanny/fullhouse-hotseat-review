@@ -730,5 +730,51 @@ body, .fh { background: #FFFBF0; }
 .snip figcaption { font-size: 14px; }
 @media (max-width: 600px) { .snips { max-width: none; } .snip { width: 180px; } }
 
+/* ================= Phones: "after you order" as story cards (play.fullhouse.app's trailer) ================= */
+.story-hint { display: none; }
+@media (max-width: 960px) {
+  .story.cards { cursor: pointer; user-select: none; -webkit-user-select: none; -webkit-touch-callout: none; -webkit-tap-highlight-color: transparent; touch-action: pan-y; }
+  /* one idea per card: headline anchored at the top, one grey line, the visual below */
+  .story.cards .story-in { grid-template-rows: auto 1fr; align-items: start; padding-top: 40px; }
+  .story.cards .story-copy { order: 0; padding: 0; }
+  .story.cards .s-stage { order: 1; align-self: start; margin-top: 8px; }
+  .story.cards .sc-wrap { height: 128px; }
+  .story.cards .sc .n { font-size: 16px; }
+  .story.cards .sc h3 { font-size: 26px; margin: 2px 0 8px; max-width: 16ch; }
+  .story.cards .sc p { font-size: 15px; line-height: 1.45; color: var(--fh-mute); max-width: 32ch; }
+  /* progress bars across the top, like stories */
+  .story.cards .rail { position: absolute; top: 14px; left: 16px; right: 16px; margin: 0; gap: 4px; z-index: 3; }
+  .story.cards .rail i { flex: 1; width: auto; height: 3px; }
+  .story.cards .story-hint { display: block; position: absolute; left: 0; right: 0; bottom: 136px; margin: 0; text-align: center; font: 400 15px var(--fh-hand); color: var(--fh-mute); z-index: 3; }
+  .story.cards.paused .story-hint::before { content: "paused · "; }
+}
+
+/* ================= Phones only: the hero as one calm play-style screen (desktop keeps the ticket, D43) =================
+   Same markup as the ticket: the boxes dissolve (display: contents) and the pieces re-order:
+   logo + founders line, headline, one line, offer, then the product photo bleeding off the bottom. */
+@media (max-width: 600px) {
+  .hero-tk { min-height: 100svh; box-sizing: border-box; padding: 0 0 0; background: var(--home-wash); display: flex; }
+  .htk { display: flex; flex-direction: column; width: 100%; filter: none; padding: 0 16px; box-sizing: border-box; }
+  .htk-main, .htk-body { display: contents; }
+  .htk-band { order: 1; background: none; color: var(--fh-text); padding: 14px 0 0; grid-template-columns: auto 1fr; gap: 12px; }
+  .htk-logo img { width: 76px; }
+  .htk-by { justify-content: flex-end; text-align: right; }
+  .htk-by small { color: var(--fh-mute); font-size: 10.5px; } .htk-by b { color: var(--fh-navy); font-size: 12px; }
+  .htk-copy { order: 2; margin-top: 7vh; }
+  .hero-tk .rot { font-size: 33px; line-height: 1.06; }
+  .hero-tk .h-sub { font-size: 15px; line-height: 1.45; color: var(--fh-mute); margin-top: 10px; }
+  .htk-stub { order: 3; background: none; border: 0; border-radius: 0; padding: 18px 0 0; -webkit-mask: none; mask: none; }
+  .htk-adm { display: none; }
+  .htk-seat { margin: 0 0 4px; }
+  .htk-stub .h-price { margin-top: 0; }
+  .htk-stub .h-price b { font-size: 36px; }
+  .htk-stub .h-btn { margin-top: 12px; }
+  .htk-ref { font-size: 13px; }
+  /* the product bleeds off the bottom, fading in at its top edge */
+  .htk-art { order: 4; margin: 14px -16px 0; flex: 1; min-height: 150px; display: flex; align-items: flex-end;
+    -webkit-mask: linear-gradient(transparent, #000 28%); mask: linear-gradient(transparent, #000 28%); }
+  .htk-art img { border-radius: 0; width: 100%; height: 100%; max-height: 34vh; object-fit: cover; object-position: 50% 40%; }
+}
+
 /* review build: draft notes hidden */
 .notes { display: none; }

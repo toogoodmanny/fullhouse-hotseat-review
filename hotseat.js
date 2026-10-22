@@ -19,11 +19,13 @@ const APP = { quiz: "https://dailyfullhouse.app.link/oldBollywood", memory: "htt
 
 $("#sibling").href = wa("Mummy-Papa ke liye ek idea: a card that opens a new KBC-style quiz, game or story on their phone every day. Kya unko pasand aayega? https://fullhouse.app");
 
-/* ---------- After you order: one pinned scene, three beats (card loaded, one tap, friends play free) ---------- */
+/* ---------- After you order: three beats (card loaded, one tap, friends play free).
+   Desktop: one pinned scene driven by scroll. Phones: story cards like play.fullhouse.app's trailer
+   (tap right = next, left = back, hold = pause, ~4.5 s each). Same timeline, two drivers. ---------- */
 gsap.registerPlugin(ScrollTrigger);
 function fitStage() {
   const mobile = innerWidth <= 960;
-  const availH = mobile ? innerHeight * .5 : innerHeight * .9, availW = mobile ? innerWidth : innerWidth / 2;
+  const availH = mobile ? innerHeight * .6 : innerHeight * .9, availW = mobile ? innerWidth : innerWidth / 2;
   $("#sStage").style.setProperty("--k", Math.min(1, availH / 600, availW / 440).toFixed(3));
 }
 fitStage(); addEventListener("resize", fitStage);
@@ -37,9 +39,11 @@ const splash = gsap.timeline({ paused: true })
 (() => {
   const sc = $$(".sc"), rail = $$(".rail b"), card = ".hs-card";
   gsap.set(sc[0], { autoAlpha: 1 });
+  const cards = matchMedia("(max-width: 960px)").matches;
   // no snap: snapping fought the reader's own scroll and pulled them back up
-  const st = gsap.timeline({ defaults: { ease: "power2.inOut" },
-    scrollTrigger: { trigger: "#story", start: "top top", end: "+=" + (reduced ? 1600 : 2200), pin: true, scrub: reduced ? true : .5 } });
+  const st = gsap.timeline({ defaults: { ease: "power2.inOut" }, paused: cards,
+    scrollTrigger: cards ? undefined : { trigger: "#story", start: "top top", end: "+=" + (reduced ? 1600 : 2200), pin: true, scrub: reduced ? true : .5 } });
+  const forward = () => cards || st.scrollTrigger.direction > 0;
   const beat = (i, at) => st.to(sc[i - 1], { autoAlpha: 0, y: -20, duration: .2 }, at).fromTo(sc[i], { autoAlpha: 0, y: 24 }, { autoAlpha: 1, y: 0, duration: .25 }, at + .15);
   // one: their login is written onto the card
   st.fromTo(".s-loadcard", { autoAlpha: 0, y: 30, rotate: -4 }, { autoAlpha: 1, y: 0, rotate: -4, duration: .25 }, 0)
@@ -55,7 +59,7 @@ const splash = gsap.timeline({ paused: true })
     .fromTo(".s-phone", { autoAlpha: 0, y: 40 }, { autoAlpha: 1, y: 0, duration: .3 }, 1.05)
     .fromTo(card, { autoAlpha: 0, x: 300, y: 420, rotate: 10, scale: .7 }, { autoAlpha: 1, x: 150, y: 330, rotate: -12, scale: .7, duration: .3 }, 1.2)
     .fromTo(".rip1", { scale: .3, autoAlpha: .9 }, { scale: 1.7, autoAlpha: 0, duration: .25, stagger: .08, ease: "power1.out", immediateRender: false }, 1.5)
-    .call(() => { if (st.scrollTrigger.direction > 0) reduced ? splash.progress(1) : splash.restart(); else { splash.pause(0); gsap.set(".sp-splash", { autoAlpha: 0 }); } }, null, 1.5)
+    .call(() => { if (forward()) reduced ? splash.progress(1) : splash.restart(); else { splash.pause(0); gsap.set(".sp-splash", { autoAlpha: 0 }); } }, null, 1.5)
     .to(card, { y: 470, autoAlpha: 0, duration: .25 }, 1.65)
     .to(rail[1], { scaleX: 1, duration: 1, ease: "none" }, 1);
   beat(2, 2);
@@ -71,7 +75,32 @@ const splash = gsap.timeline({ paused: true })
   st.to(card, { y: 470, autoAlpha: 0, duration: .15 }, 2.95)
     .to(rail[2], { scaleX: 1, duration: 1, ease: "none" }, 2)
     .to({}, { duration: .1 }, 3);
+  if (cards) storyCards(st);
 })();
+
+function storyCards(st) {
+  const story = $("#story");
+  story.classList.add("cards");
+  let i = 0, run, holdT, held = false, started = false;
+  const go = n => {
+    if (n < 0 || n > 2) return;
+    i = n; if (run) run.kill();
+    st.seek(i, true); // jump without re-firing the splash; playing forward from here fires it
+    run = st.tweenFromTo(i, i + 1, { duration: reduced ? .01 : 4.5, ease: "none", onComplete: () => go(i + 1) });
+    if (story.classList.contains("paused")) run.pause();
+  };
+  story.addEventListener("click", e => {
+    if (held) { held = false; return; }
+    go(e.clientX < innerWidth * .3 ? i - 1 : i + 1);
+  });
+  story.addEventListener("pointerdown", () => { holdT = setTimeout(() => { held = true; story.classList.add("paused"); run && run.pause(); }, 250); });
+  const release = () => { clearTimeout(holdT); if (story.classList.contains("paused")) { story.classList.remove("paused"); run && run.resume(); } };
+  ["pointerup", "pointercancel", "pointerleave"].forEach(t => story.addEventListener(t, release));
+  new IntersectionObserver(([e]) => {
+    if (e.isIntersecting) { if (!started) { started = true; go(0); } else if (!story.classList.contains("paused")) run && run.resume(); }
+    else run && run.pause();
+  }, { threshold: .6 }).observe(story);
+}
 
 /* ---------- Order bar: pinned on every screen after the hero ---------- */
 new IntersectionObserver(([e]) => { $("#buybar").classList.toggle("on", !e.isIntersecting); document.documentElement.classList.toggle("past-hero", !e.isIntersecting); }).observe($("#top"));
