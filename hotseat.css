@@ -620,5 +620,85 @@ body { padding-bottom: 130px;}
 .ask-btn-app:active { transform: translate(-3px, 3px); box-shadow: none; }
 .coins[hidden] { display: none; }
 
+/* ================= Warm, homely (D45): fullhouse.app's cream base, the house behind everything, peach washes ================= */
+:root { --fh-paper: #FFFBF0; --fh-paper-2: #FFF4D6; --home-wash: linear-gradient(#FFFBF0, rgba(255,244,214,.4)); }
+body, .fh { background: #FFFBF0; }
+.house-bg { position: fixed; inset: 0; z-index: -1; background: url(assets/bg-house.webp) center / cover no-repeat; opacity: .15; pointer-events: none; }
+.hero-tk, .week5, .proof, .end { background: var(--home-wash); }
+/* the story is light now: navy ink on a peach wash, phones and card stay as they are */
+.story { background: linear-gradient(#FFF4D6, #FFE8C2); color: var(--fh-text); }
+.story .fh-h2, .sc h3 { color: var(--fh-navy); }
+.sc p { color: var(--fh-text); }
+.story .lbl { color: var(--fh-orange-text); }
+.rail i { background: rgba(27,35,80,.15); }
+.s-glow { background: radial-gradient(closest-side, rgba(255,255,255,.7), transparent); }
+.lc-line { color: var(--fh-mute); } .lc-line b { color: var(--fh-navy); }
+.lc-bar { background: rgba(27,35,80,.12); }
+.s-loadcard { box-shadow: 0 30px 50px -24px rgba(20,25,50,.45); }
+/* languages: a warm band, not a navy slab */
+.lang-band { background: #FFE8C2; color: var(--fh-navy); }
+.lang-band .aside { color: var(--fh-orange-text); }
+
+/* the order bar does not exist until the hero is fully gone */
+.buybar { visibility: hidden; opacity: 0; transition: transform .3s, opacity .3s, visibility 0s .3s; }
+.buybar.on { visibility: visible; opacity: 1; transition: transform .3s, opacity .3s; }
+.fh-ticker.dock { visibility: hidden; }
+.past-hero .fh-ticker.dock { visibility: visible; }
+
+/* testimonials: video size like fullhouse.app; chats in one auto-scrolling row */
+.reels { grid-template-columns: repeat(3, 160px); gap: 16px; }
+.reel figcaption b { font-size: 16px; } .reel figcaption span { font-size: 13px; }
+.reel-line { font-size: 12.5px; padding: 28px 10px 10px; }
+.reel-play { width: 48px; height: 48px; margin: -24px; }
+.snips { overflow: hidden; margin-inline: calc(50% - 50vw); padding: 8px 0 16px; -webkit-mask: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent); mask: linear-gradient(90deg, transparent, #000 6%, #000 94%, transparent); }
+.snip-wall { columns: auto; display: flex; align-items: flex-start; gap: 18px; width: max-content; max-width: none; animation: snip-crawl 45s linear infinite; }
+.snips:hover .snip-wall, .snips:focus-within .snip-wall, .snips:active .snip-wall { animation-play-state: paused; }
+.snip { flex: none; width: 240px; margin: 0; }
+.snip figcaption { font-size: 15px; }
+@keyframes snip-crawl { to { transform: translateX(calc(-50% - 9px)); } }
+@media (prefers-reduced-motion: reduce) { .snip-wall { animation: none; } .snips { overflow-x: auto; } }
+
+/* ================= Mobile: each section's main objects fit one phone screen ================= */
+@media (max-width: 600px) {
+  :root { --sec: 44px; --gap-lead: 10px; --gap-body: 24px; }
+  .fh { font-size: 15.5px; }
+  .fh-h2 { font-size: 26px; line-height: 1.12; }
+  .fh-label { font-size: 11px; }
+  .lead, .week5 .lead { font-size: 14.5px; line-height: 1.45; }
+  /* S2: header + 7 days lead; the phone sized to sit in the same screen */
+  .week5-grid { gap: 18px; }
+  .tap-row { margin: 16px 0 6px; }
+  .w-copy .tickets { gap: 3px; }
+  /* testimonials: the three videos side by side, chats crawl below */
+  .proof .v-head .fh-h2 { max-width: 14ch; }
+  .reels { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; overflow: visible; margin-inline: 0; padding: 0; }
+  .reel figcaption b { font-size: 13px; } .reel figcaption span { font-size: 11.5px; }
+  .reel-line { display: none; }
+  .speed { top: 6px; right: 6px; padding: 2px; }
+  .speed button { min-width: 30px; min-height: 30px; padding: 0 5px; font-size: 11px; }
+  .snip { width: 200px; }
+  .lang-band { padding-block: 18px; }
+  .lang-band b { font-size: 22px; }
+  .finale-h { font-size: 64px; }
+  .finale-sub { font-size: 16px; }
+  .credits .fh-h3 { font-size: 21px; }
+  .extra { padding: 12px 14px 14px; }
+  .extra b { font-size: 16px; }
+  .end-h { font-size: 24px; }
+  .poster-slot { max-width: 260px; }
+}
+@media (max-width: 600px) {
+  /* three narrow reels: the speed pill sits under each video, not on it */
+  .speed { position: static; margin-top: 6px; justify-content: space-between; background: rgba(27,35,80,.08); backdrop-filter: none; }
+  .speed button { flex: 1; min-height: 36px; color: var(--fh-navy); }
+  .speed button[aria-pressed="true"] { background: var(--fh-navy); color: var(--fh-paper); }
+}
+@media (max-width: 600px) { .week5 { padding-block: 28px; } .week5 .lbl { margin-bottom: 6px; } }
+@media (max-width: 600px) {
+  .reel { min-width: 0; }
+  .speed button { min-width: 0; padding: 0 2px; font-size: 11px; }
+  .reel figcaption b { font-size: 12.5px; line-height: 1.25; }
+}
+
 /* review build: draft notes hidden */
 .notes { display: none; }

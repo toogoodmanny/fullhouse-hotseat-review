@@ -247,7 +247,7 @@ select(todayIdx, true);
 /* ---------- The playable phone fits the screen ---------- */
 function fitPhone() {
   const p = $(".play");
-  p.style.setProperty("--pz", (innerWidth <= 960 ? Math.min(1, (innerWidth - 64) / 330) : Math.max(.6, Math.min(1, (innerHeight - 140) / 680))).toFixed(3));
+  p.style.setProperty("--pz", (innerWidth <= 960 ? Math.min(1, (innerWidth - 64) / 330, (innerHeight - 320) / 716) : Math.max(.6, Math.min(1, (innerHeight - 140) / 680))).toFixed(3));
 }
 fitPhone(); addEventListener("resize", fitPhone);
 
@@ -311,8 +311,8 @@ REELS.forEach(r => {
   new IntersectionObserver(([e]) => { if (!e.isIntersecting) v.pause(); }).observe(v);
   $("#reels").appendChild(el);
 });
-SNIPS.forEach((n, k) => {
-  const el = document.createElement("figure"); el.className = "snip"; el.style.setProperty("--r", [-1.2, .8, -.5, 1.1, -.9][k % 5] + "deg");
+[...SNIPS, ...SNIPS].forEach((n, k) => {
+  const el = document.createElement("figure"); if (k >= SNIPS.length) el.setAttribute("aria-hidden", "true"); el.className = "snip"; el.style.setProperty("--r", [-1.2, .8, -.5, 1.1, -.9][k % 5] + "deg");
   el.innerHTML = `<img src="${n.src}" alt="${n.alt}" width="600" height="${n.h}" loading="lazy"><figcaption class="fh-note">${n.cap}</figcaption>`;
   $("#snips").appendChild(el);
 });
