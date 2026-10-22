@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 428 270" width="428" height="270">
+  <!-- PLACEHOLDER Hotseat card. Replace this one file with the final card design (same name, any aspect close to 85.6x54mm);
+       every place on v5 that shows the card uses assets/card.svg. -->
+  <defs>
+    <linearGradient id="spot" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#F4C66E" stop-opacity=".55"/><stop offset="1" stop-color="#F4C66E" stop-opacity="0"/></linearGradient>
+    <clipPath id="r"><rect width="428" height="270" rx="22"/></clipPath>
+  </defs>
+  <g clip-path="url(#r)">
+    <rect width="428" height="270" fill="#182150"/>
+    <path d="M62 0h36l70 230H-8z" fill="url(#spot)"/>
+    <g transform="translate(20 92) scale(2.3)">
+      <path d="M12 24c0-10 6-16 20-16s20 6 20 16v6H12z" fill="#C56B00"/>
+      <rect x="3" y="22" width="13" height="21" rx="6" fill="#FF8A00"/><rect x="48" y="22" width="13" height="21" rx="6" fill="#FF8A00"/>
+      <rect x="14" y="29" width="36" height="12" rx="4" fill="#FFB68C"/><rect x="5" y="39" width="54" height="8" rx="3" fill="#FF8A00"/>
+      <path d="M11 47l-2 7M53 47l2 7" stroke="#C56B00" stroke-width="3" stroke-linecap="round"/>
+    </g>
+    <text x="300" y="132" text-anchor="middle" font-family="Fraunces, Georgia, serif" font-weight="700" font-size="32" fill="#FFFAE8" letter-spacing="1">FULLHOUSE</text>
+    <text x="300" y="168" text-anchor="middle" font-family="Fraunces, Georgia, serif" font-weight="600" font-size="20" fill="#F4C66E" letter-spacing="5">HOTSEAT</text>
+    <text x="272" y="222" text-anchor="middle" font-family="Fraunces, Georgia, serif" font-weight="600" font-size="22" fill="#FFFAE8" letter-spacing="3">TAP TO PLAY</text>
+    <g transform="translate(372 205)" fill="none" stroke="#F4C66E" stroke-width="3.2" stroke-linecap="round">
+      <path d="M5 7a5 5 0 0 1 0 6M9 4.5a9 9 0 0 1 0 11M13 2a13 13 0 0 1 0 16"/>
+    </g>
+    <rect x="1.5" y="1.5" width="425" height="267" rx="21" fill="none" stroke="#F4C66E" stroke-opacity=".5" stroke-width="2"/>
+  </g>
+</svg>
