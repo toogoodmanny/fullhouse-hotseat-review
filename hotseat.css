@@ -615,6 +615,10 @@ body { padding-bottom: 130px;}
   /* the stage is scaled with transform, so give back the space the unscaled 600px would reserve */
   .s-stage { transform-origin: 50% 0; margin-bottom: calc((var(--k, 1) - 1) * 600px); }
 }
+/* story day button: the app's own outline button (same family as the lifelines), not a flat WhatsApp block */
+.ask-btn-app { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 0 18px; border-radius: 10px; background: #fff; border: 2px solid var(--teal); color: var(--teal); box-shadow: -3px 3px 0 var(--teal-lo); font: 700 14px var(--app); text-decoration: none; }
+.ask-btn-app:active { transform: translate(-3px, 3px); box-shadow: none; }
+.coins[hidden] { display: none; }
 
 /* review build: draft notes hidden */
 .notes { display: none; }

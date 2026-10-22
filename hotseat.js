@@ -5,6 +5,7 @@ const reduced = matchMedia("(prefers-reduced-motion: reduce)").matches;
 const $ = (s, el = document) => el.querySelector(s);
 const $$ = (s, el = document) => [...el.querySelectorAll(s)];
 const wa = t => "https://wa.me/?text=" + encodeURIComponent(t);
+const APP = { quiz: "https://dailyfullhouse.app.link/oldBollywood", memory: "https://dailyfullhouse.app.link/memory", react: "https://dailyfullhouse.app.link/shapeMatch" };
 
 /* ---------- Debug labels + claim tags toggle (draft only) ---------- */
 (() => {
@@ -127,6 +128,7 @@ $("#nextDay").onclick = () => { play("on-tap"); select((cur + 1) % 7); };
 
 function select(i, first = false) {
   timers.forEach(clearTimeout); timers = [];
+  $("#coins").hidden = true;
   cur = i;
   $$(".tk", week).forEach((b, j) => { b.setAttribute("aria-selected", j === i); b.tabIndex = j === i ? 0 : -1; });
   card.setAttribute("aria-labelledby", "tk" + i);
@@ -147,7 +149,7 @@ function quizCard(w, flipped = false) {
     <div class="toast" id="vd"></div>
     <div class="lls"><p>Life Lines</p><div class="ll"><button id="l50">50-50</button><button id="lfl" ${flipped ? "disabled" : ""}>Flip Question</button><button id="lph">Phone a Friend</button></div></div>`;
   const opts = $$(".opt", card), vd = $("#vd", card);
-  const msg = `Fullhouse ka aaj ka sawaal 📞\n\n${it.q}\n${it.o.map((o, k) => "ABCD"[k] + ") " + o).join("\n")}\n\nAapka jawab?`;
+  const msg = `Fullhouse ka aaj ka sawaal 📞\n\n${it.q}\n${it.o.map((o, k) => "ABCD"[k] + ") " + o).join("\n")}\n\nAapka jawab?\n\nKhelo yahan: ${APP.quiz}`;
   if (!reduced) gsap.from(opts, { y: 14, scale: .94, stagger: .05, duration: .4, ease: "back.out(1.6)", clearProps: "transform" });
   opts.forEach(b => b.onclick = () => {
     $$(".opt, .ll button", card).forEach(x => x.disabled = true);
@@ -194,7 +196,7 @@ function memCard(w) {
     if (a.dataset.f === b.dataset.f) {
       later(() => { a.classList.add("done"); b.classList.add("done"); open = []; done += 2; play("correct");
         if (done === 8) { coins(); addPoints(20); play("complete");
-          vd.innerHTML = `<b>Done in ${moves} moves! +20 points.</b> <a href="${wa(`Fullhouse memory game: I did it in ${moves} moves. Aap kitne mein karoge? 😄`)}" target="_blank" rel="noopener">Challenge Papa →</a>`; }
+          vd.innerHTML = `<b>Done in ${moves} moves! +20 points.</b> <a href="${wa(`Fullhouse memory game: I did it in ${moves} moves. Aap kitne mein karoge? 😄\nKhelo yahan: ${APP.memory}`)}" target="_blank" rel="noopener">Challenge Papa →</a>`; }
       }, 350);
     } else later(() => { a.classList.remove("up"); b.classList.remove("up"); a.setAttribute("aria-label", "Face-down tile"); b.setAttribute("aria-label", "Face-down tile"); open = []; }, 850);
   });
@@ -217,7 +219,7 @@ function reactCard(w) {
     else if (state === "wait") { timers.forEach(clearTimeout); state = "idle"; play("losing"); vd.textContent = "Too soon! Tap to try again."; }
     else { const ms = Math.round(performance.now() - t0); best = best === null ? ms : Math.min(best, ms);
       state = "idle"; diya.classList.remove("lit"); play("correct");
-      vd.innerHTML = `<b>${ms} ms.</b> Best ${best} ms. Again, or <a href="${wa(`Fullhouse diya game: my best is ${best} ms. Aap try karo! 🪔`)}" target="_blank" rel="noopener">dare Mummy →</a>`; }
+      vd.innerHTML = `<b>${ms} ms.</b> Best ${best} ms. Again, or <a href="${wa(`Fullhouse diya game: my best is ${best} ms. Aap try karo! 🪔\nKhelo yahan: ${APP.react}`)}" target="_blank" rel="noopener">dare Mummy →</a>`; }
   };
 }
 
@@ -228,7 +230,7 @@ function storyCard(w) {
     <img class="st-art" src="assets/live/story-time.webp" alt="Story Time: grandparents and grandchildren together">
     <p class="st-lbl">Question</p>
     <div class="st-q">${w.prompt}</div>
-    <div class="center" style="margin-top:auto"><a class="wa-btn" href="${wa(`Mummy-Papa, ek sawaal 🧡
+    <div class="center" style="margin-top:auto"><a class="ask-btn-app" href="${wa(`Mummy-Papa, ek sawaal 🧡
 ${w.prompt}`)}" target="_blank" rel="noopener">Ask them this today</a></div>`;
 }
 
@@ -236,7 +238,8 @@ ${w.prompt}`)}" target="_blank" rel="noopener">Ask them this today</a></div>`;
 let coinAnim;
 function coins() {
   if (reduced || !window.lottie) return;
-  if (!coinAnim) coinAnim = lottie.loadAnimation({ container: $("#coins"), renderer: "svg", loop: false, autoplay: false, path: "assets/coins.json" });
+  if (!coinAnim) { coinAnim = lottie.loadAnimation({ container: $("#coins"), renderer: "svg", loop: false, autoplay: false, path: "assets/coins.json" }); coinAnim.addEventListener("complete", () => $("#coins").hidden = true); }
+  $("#coins").hidden = false;
   coinAnim.goToAndPlay(0, true);
 }
 select(todayIdx, true);
